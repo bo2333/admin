@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <!--Embed the header.html template at this location-->
+  {[ template "header.html" .]}
+</head>
+<body>
+<div class="panel-top-{[.skinId]}">
+  <div style="margin: 6px 6px 6px 6px;">
+    <i class="fa fa-info-circle layui-input-inline" style="margin-right: 8px">
+      <b>行为日志</b>
+    </i>
+    <button type="button" class="layui-btn layui-layout-right layui-btn-xs layui-input-inline" onclick="onLogFindState()" id="btn_log_find" style="margin: 10px">
+      <i class="layui-icon  layui-icon-down" id="bnt_log_find_icon"></i>
+    </button>
+
+  </div>
+
+  <hr>
+  <div class="layui-row layui-form" id="box_log_find" style="display:none">
+    <div class="layui-col-md3 layui-col-sm6 layui-col-xs12" style="padding-bottom: 5px">
+      <div class="layui-input-inline" style="width: 158px">
+        <select id="sel_opm" lay-filter="sel_opm"></select> <!--类型-->
+      </div>
+      <div class="layui-input-inline" style="width: 199px">
+        <select id="sel_ops" lay-filter="sel_ops"></select> <!--子类-->
+      </div>
+    </div>
+    <div class="layui-col-md4 layui-col-sm6 layui-col-xs12" style="padding-bottom: 5px">
+      <div class="layui-input-inline" style="width: 158px">
+        <select class="layui-btn" id="sel_par1"></select> <!--par1-->
+      </div>
+      <div class="layui-input-inline" style="width: 158px">
+        <select class="layui-btn" id="sel_par2"></select> <!--par2-->
+      </div>
+      <div class="layui-input-inline" style="width: 158px">
+        <select class="layui-btn" id="sel_par3"></select> <!--par3-->
+      </div>
+    </div>
+    <div class="layui-col-md4 layui-col-sm10 layui-col-xs12" style="padding-bottom: 5px">
+      <div class="layui-input-inline">
+        <input type="text" id="sel_stm" class="layui-input layui-input-inline" placeholder="开始日期"  style="width: 150px">
+      </div>
+      <div class="layui-input-inline">
+        <input type="text" id="sel_etm" class="layui-input layui-input-inline" placeholder="结束日期" style="width: 150px">
+      </div>
+    </div>
+    <div class="layui-col-md1 layui-col-sm1 layui-col-xs12" style="padding-bottom: 5px">
+      <button class="layui-btn" id="sel_find" onclick="onLogFindSet()">
+        <i class="layui-icon layui-icon-find-fill layui-font-12"></i> 查找
+      </button>
+    </div>
+  </div>
+
+  <table id="tab_account_log" lay-filter="demo" ></table>
+</div>
+
+
+<!--行内按钮-->
+<script type="text/html" id="bar_btn">
+  <button class="layui-btn layui-btn-xs layui-btn-primary" lay-event="detail">
+    <i class="fa fa-ellipsis-h"></i>
+  </button>
+</script>
+
+<!--详细-->
+<div id="box_from_log" style="display: none">
+  <form id="frm_account_log" lay-filter="frm_account_log" class="layui-form" action="" style="margin: 6px 12px 6px -30px;">
+    <div class="layui-card" style="margin: 6px 0px 12px 42px; padding: 6px 6px 12px 6px;">
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">ID</label>
+        <span id="name" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">操作类</label>
+        <span id="opm" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">操作子项</label>
+        <span id="ops" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">当前值</label>
+        <span id="val" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">改变值</label>
+        <span id="chg" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">参数1</label>
+        <span id="par1" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">参数2</label>
+        <span id="par2" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">参数3</label>
+        <span id="par3" style="color:#ff9966">65555</span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">参数4</label>
+        <span id="par4" style="color:#ff9966"></span>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-badge layui-bg-green" style="width: 70px; display:inline-block;">时间</label>
+        <span id="ctm" style="color:#ff9966"></span>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--公共方法 在index.html-->
+{[ template "method.html" .]}
+
+
+
+<script type="text/javascript">
+  let logBoxId     // 操作帐户弹出的对话框id
+  let page = 1          // 当前页码
+  let cols = []
+  let names = []
+  let whereData = {
+    stm: 0,
+    etm: 0,
+    aid: 0,
+    opm: 0,
+    ops: 0,
+    par1: 0,
+    par2: 0,
+    par3: 0,
+  }
+  let describes = []
+  let tableIns
+  
+  
+  // 表格显示
+  function tableRender(tab, cols) {
+    tableIns = tab.render({
+      elem: '#tab_account_log'
+      , title: '用户表'
+      // , height: 312
+      // , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+      , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+        layout: ['count', 'prev', 'page', 'next'] //自定义分页布局
+        ,groups: 10 //只显示 1 个连续页码
+        ,first: false //不显示首页
+        ,last: false //不显示尾页
+        // ,theme: "#5FB878"
+      }
+      , where: whereData
+      , limit: 10      //每页默认显示的数量
+      , method:'get'  //提交方式
+      , cols: cols
+      , url: '/action/page',  //请求路径
+      // , data: data //'/demo/table/user/' //数据接口
+    });
+  }
+
+  function getParDescribe(data, key) {
+    let opm = data.opm
+    let ops = data.ops
+    let val = data[key]
+    return describes[opm]
+      && describes[opm]['ops']
+      && describes[opm]['ops'][ops]
+      && describes[opm]['ops'][ops][key]
+      && describes[opm]['ops'][ops][key][val]
+            ? describes[opm]['ops'][ops][key][val] + ':' + val : val
+  }
+
+
+ // 设置表格
+  function tableRefresh() {
+   layui.use(['table', 'laydate'], function(){
+     let laydate = layui.laydate
+     let table = layui.table;
+     cols = [[
+       {
+         field: 'aid',
+         title: 'Name',
+         width: 84,
+         templet: function (d) {
+           return names[d.aid] ? names[d.aid] : d.aid
+         }
+       }, {
+         field: 'opm',
+         title: '操作类',
+         width:100,
+         templet: function (d) {
+           return describes[d.opm] ? describes[d.opm].name : d.opm
+         }
+       }, {
+         field: 'ops',
+         title: '操作子项',
+         width:114,
+         templet: function (d) {
+           return describes[d.opm] && describes[d.opm]['ops'] && describes[d.opm]['ops'][d.ops] ? describes[d.opm]['ops'][d.ops].name : d.ops
+         }
+      }
+     ]]
+
+     if ($(window).width() >= 600) {
+       cols[0].push({field: 'val', width: 120, title: '当前值'})
+       cols[0].push({field: 'chg', width: 120, title: '改变值'})
+       cols[0].push({
+         field: 'par1',
+         title: '参数1',
+         width: 120,
+         templet: function (d) {
+           return getParDescribe(d, 'par1')
+         }
+       })
+       cols[0].push({
+         field: 'par2',
+         title: '参数2',
+         width: 150,
+         templet: function (d) {
+           return getParDescribe(d, 'par2')
+         }
+       })
+       cols[0].push({
+         field: 'par3',
+         title: '参数3',
+         width: 150,
+         templet: function (d) {
+           return getParDescribe(d, 'par3')
+         }
+       })
+       cols[0].push({
+         field: 'par4',
+         width: 150,
+         title: '参数4',
+       })
+       cols[0].push({
+         field: 'ctm',
+         title: '时间',
+         width: 160,
+         templet: function (d) {
+           return d.ctm ? layui.util.toDateString(d.ctm * 1000, 'yyyy-MM-dd HH:mm:ss') : "没有创建时间"
+         }
+       })
+     } else {
+       cols[0].unshift({
+         fixed: 'idx',
+         width:60,
+         sort: false,
+         title:'详情',
+         toolbar: '#bar_btn'
+       })
+     }
+
+     // 第一次显示表格
+     tableRender(table, cols)
+
+     // 监听 行内按钮
+     table.on('tool(demo)', function(obj){
+       let data = obj.data;
+       if(obj.event === 'detail'){
+         dialogBox(data)
+       }
+     });
+
+     laydate.render({
+       elem: '#sel_stm'
+       ,type: 'datetime'
+     });
+
+     laydate.render({
+       elem: '#sel_etm'
+       ,type: 'datetime'
+     });
+
+
+   });
+ }
+
+  // 选择框
+  let logFindState = false
+  function onLogFindState() {
+    logFindState = !logFindState
+    if (logFindState) {
+      $("#box_log_find").show()
+      $("#bnt_log_find_icon").removeClass("layui-icon-down").addClass("layui-icon-up")
+    } else {
+      $("#box_log_find").hide()
+      $("#bnt_log_find_icon").removeClass("layui-icon-up").addClass("layui-icon-down")
+    }
+  }
+
+  // 设置参数
+  function setFindParam(name) {
+    let val = $(`#sel_${name}`).val()
+    if (val !== "" || val > 0) {
+      whereData[name] = val
+    }
+  }
+
+  // 响应设置查找参数
+  function onLogFindSet() {
+    setFindParam("aid")
+    setFindParam("opm")
+    setFindParam("ops")
+    setFindParam("stm")
+    setFindParam("etm")
+    setFindParam("par1")
+    setFindParam("par2")
+    setFindParam("par3")
+    tableIns.reload()
+  }
+
+  // 窗口变化处理
+  function windowChange(width) {
+    if (width <= 750) { //  修改这个参数要更改 index.html setIFrameHeight 内的那个参数
+      $("#btn_log_find").show()
+      $("#box_log_find").hide()
+      logFindState = false
+    } else {
+      $("#btn_log_find").hide()
+      $("#box_log_find").show()
+      logFindState = true
+    }
+  }
+
+
+ // 操作对话框
+  function dialogBox(d) {
+    let title = "详情"
+    let frm = $("#frm_account_log")
+    frm[0].reset()
+    frm.find("#name").html(names[d.aid] ? names[d.aid] : d.aid)
+    frm.find("#opm").html(describes[d.opm] ? describes[d.opm].name : d.opm)
+    frm.find("#ops").html(describes[d.opm] && describes[d.opm]['ops'] && describes[d.opm]['ops'][d.ops] ? describes[d.opm]['ops'][d.ops].name : d.ops)
+
+    frm.find("#val").html(d.val)
+    frm.find("#chg").html(d.chg)
+    frm.find("#par1").html(getParDescribe(d, 'par1'))
+    frm.find("#par2").html(getParDescribe(d, 'par2'))
+    frm.find("#par3").html(getParDescribe(d, 'par3'))
+    frm.find("#par4").html(d.par4)
+    frm.find("#ctm").html(d.ctm ? layui.util.toDateString(d.ctm * 1000, 'yyyy-MM-dd HH:mm:ss') : "没有创建时间")
+
+
+    changeAccount = layer.open({
+      type: 1,
+      skin: 'layui-layer-demo panel-top-{[.skinId]}', //样式类名
+      title: [`<b><i class="fa fa-database" style="margin-right: 6px"></i> ${title} </b>`],
+      closeBtn: 1, //不显示关闭按钮
+      area: ['350px', '500px'],
+      icon: 5,
+      anim: 1,
+      shadeClose: true, //开启遮罩关闭
+      content: $("#box_from_log"),
+    });
+
+  }
+
+  // 读取数据
+  function getData() {
+    loadingTips(true)
+    $.get("/action/data").done(function (ret) {
+      if (handleData(ret, "读取分组信息")) {
+        console.log(ret)
+        describes = ret.msg['describe']
+        let selOpm = $("#sel_opm")
+        if (describes) {
+          $.each(describes,function(key,value){
+            selOpm.append(new Option( value.name, key));
+          })
+          layui.form.render("select");
+        }
+        if (ret.msg['accounts'] != null && ret.msg['accounts'].length > 0) {
+          $.each(ret.msg['accounts'],function(_,value){
+            names[value.id] = value.name
+          })
+        }
+      }
+    }).always(function () {
+      loadingTips(false)
+    })
+
+    layui.use('form', function(){
+      let form = layui.form;
+      form.on("select(sel_opm)", function(data){
+        if (describes[data.value] && describes[data.value]['ops']) {
+          let selOps = $("#sel_ops")
+          selOps.empty()
+          $.each(describes[data.value]['ops'],function(key,value){
+            selOps.append(new Option( value.name, key));
+          })
+          let selPar1 = $("#sel_par1")
+          selPar1.empty()
+          selPar1.append(new Option( "全部", "0"));
+          let selPar2 = $("#sel_par2")
+          selPar2.empty()
+          selPar2.append(new Option( "全部", "0"));
+          let selPar3 = $("#sel_par3")
+          selPar3.empty()
+          selPar3.append(new Option( "全部", "0"));
+          layui.form.render("select");
+        }
+      });
+
+      form.on("select(sel_ops)", function(data){
+        setParamList(data.value, "par1")
+        setParamList(data.value, "par2")
+        setParamList(data.value, "par3")
+        layui.form.render("select");
+      });
+    });
+
+  }
+
+  function setParamList(ops, name) {
+    let opm = $("#sel_opm").val()
+    let selPar = $(`#sel_${name}`)
+    if (describes[opm] && describes[opm]['ops'] && describes[opm]['ops'][ops]&& describes[opm]['ops'][ops][name]) {
+      selPar.empty()
+      $.each(describes[opm]['ops'][ops][name],function(key,value){
+        selPar.append(new Option( value, key));
+      })
+      return true
+    }
+  }
+
+  $(function () {
+    getData()
+    tableRefresh()
+    windowChange($(window).width())
+  })
+
+  $(window).resize(function(){
+    windowChange($(window).width())
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+
+
+/*皮肤0 藏青 --- ----------------------------------------------------------------------------*/
+.nav-bg-0 {
+    background-color: #2F4056;
+}
+
+/*  导航logo色 */
+.nav-logo-icon-0 {
+    letter-spacing: 2px;
+    float: left;
+    font-family: Microsoft Yahei, serif;
+    text-shadow: 0px 0px 0 #f96,-1px -1px 0 #f96;
+    color:#FAFAFA
+}
+
+/*  导航logo文字色 */
+.nav-logo-title-0 {
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    font-family: Microsoft Yahei, serif;
+    float: left;
+    font-weight: bold;
+    color: #FAFAFA;
+}
+
+/*  导航主节点色 */
+.nav-parent-0 {
+    color: #FAFAFA;
+}
+
+/* 常规面板 */
+.panel-top-0 {
+    border-top:3px solid #FF5722;
+}
+
+/*  信息面板 */
+.panel-info-left-0 {
+    border-left:5px solid #009688;
+    background-color: #01AAED;
+}
+
+/* 按钮的背景色 */
+.btn-bg-0 {
+    background-color: #5FB878;
+}
+
+/* 皮肤1 蓝色--- ----------------------------------------------------------------------------*/
+.nav-bg-1 {
+    background-color: #01AAED;
+}
+
+/*  导航logo色 */
+.nav-logo-icon-1 {
+    letter-spacing: 2px;
+    float: left;
+    font-family: Microsoft Yahei, serif;
+    text-shadow: 0px 0px 0 #f96,-1px -1px 0 #f96;
+    color:#FAFAFA
+}
+
+/*  导航logo文字色 */
+.nav-logo-title-1 {
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    font-family: Microsoft Yahei, serif;
+    float: left;
+    font-weight: bold;
+    color: #FAFAFA;
+}
+
+/*  导航主节点色 */
+.nav-parent-1 {
+    color: #FAFAFA;
+}
+
+/* 常规面板 */
+.panel-top-1 {
+    border-top:3px solid #f15b6c;
+}
+
+/*  信息面板 */
+.panel-info-left-1 {
+    border-left:5px solid #009688;
+    background-color: #46485f;
+    color:#FAFAFA;
+    font-family: Microsoft Yahei, serif;
+}
+
+/* 按钮的背景色 */
+.btn-bg-1 {
+    background-color: #5FB878;
+}
+
+/* 皮肤2 墨绿--- ----------------------------------------------------------------------------*/
+.nav-bg-2 {
+    background-color: #009688;
+}
+
+/*  导航logo色 */
+.nav-logo-icon-2 {
+    letter-spacing: 2px;
+    float: left;
+    font-family: Microsoft Yahei, serif;
+    text-shadow: 0px 0px 0 #f96,-1px -1px 0 #f96;
+    color:#FAFAFA
+}
+
+/*  导航logo文字色 */
+.nav-logo-title-2 {
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    font-family: Microsoft Yahei, serif;
+    float: left;
+    font-weight: bold;
+    color: #FAFAFA;
+}
+
+/*  导航主节点色 */
+.nav-parent-2 {
+    color: #FAFAFA;
+}
+
+/* 常规面板 */
+.panel-top-2 {
+    border-top:3px solid #5FB878;
+}
+
+/*  信息面板 */
+.panel-info-left-2 {
+    border-left:5px solid #393D49;
+    background-color: #46485f;
+}
+
+/* 按钮的背景色 */
+.btn-bg-2 {
+    background-color: #5FB878;
+}
+
+/* 皮肤3 橙色--- ----------------------------------------------------------------------------*/
+.nav-bg-3 {
+    background-color: #FFB800;
+}
+
+/*  导航logo色 */
+.nav-logo-icon-3 {
+    letter-spacing: 2px;
+    float: left;
+    font-family: Microsoft Yahei, serif;
+    text-shadow: 0px 0px 0 #5FB878,-1px -1px 0 #5FB878;
+    color:#FAFAFA
+}
+
+/*  导航logo文字色 */
+.nav-logo-title-3 {
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    font-family: Microsoft Yahei, serif;
+    float: left;
+    font-weight: bold;
+    color: #FAFAFA;
+}
+
+/*  导航主节点色 */
+.nav-parent-3 {
+    color: #FAFAFA;
+}
+
+/* 常规面板 */
+.panel-top-3 {
+    border-top:3px solid #5FB878;
+}
+
+/*  信息面板 */
+.panel-info-left-3 {
+    border-left:5px solid #009688;
+    background-color: #01AAED;
+}
+
+/* 按钮的背景色 */
+.btn-bg-3 {
+    background-color: #5FB878;
+}
+
+/* 皮肤4 赤色--- ----------------------------------------------------------------------------*/
+.nav-bg-4 {
+    background-color: #FF5722;
+}
+
+/*  导航logo色 */
+.nav-logo-icon-4 {
+    letter-spacing: 2px;
+    float: left;
+    font-family: Microsoft Yahei, serif;
+    text-shadow: 0px 0px 0 #5FB878,-1px -1px 0 #5FB878;
+    color:#FAFAFA
+}
+
+/*  导航logo文字色 */
+.nav-logo-title-4 {
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    font-family: Microsoft Yahei, serif;
+    float: left;
+    font-weight: bold;
+    color: #FAFAFA;
+}
+
+/*  导航主节点色 */
+.nav-parent-4 {
+    color: #FAFAFA;
+}
+
+/* 常规面板 */
+.panel-top-4 {
+    border-top:3px solid #009688;
+}
+
+/*  信息面板 */
+.panel-info-left-4 {
+    border-left:5px solid #393D49;
+    background-color: #01AAED;
+}
+
+/* 按钮的背景色 */
+.btn-bg-4 {
+    background-color: #009688;
+}
+
+
+/* 皮肤5 雅黑--- ----------------------------------------------------------------------------*/
+.nav-bg-5 {
+    background-color: #393D49;
+}
+
+/*  导航logo色 */
+.nav-logo-icon-5 {
+    letter-spacing: 2px;
+    float: left;
+    font-family: Microsoft Yahei, serif;
+    text-shadow: 0px 0px 0 #f96,-1px -1px 0 #f96;
+    color:#FAFAFA
+}
+
+/*  导航logo文字色 */
+.nav-logo-title-5 {
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    font-family: Microsoft Yahei, serif;
+    float: left;
+    font-weight: bold;
+    color: #FAFAFA;
+}
+
+/*  导航主节点色 */
+.nav-parent-5 {
+    color: #FAFAFA;
+}
+
+/* 常规面板 */
+.panel-top-5 {
+    border-top:3px solid #FFB800;
+}
+
+/*  信息面板 */
+.panel-info-left-5 {
+    border-left:5px solid #5FB878;
+    background-color: #01AAED;
+}
+
+/* 按钮的背景色 */
+.btn-bg-5 {
+    background-color: #5FB878;
+}

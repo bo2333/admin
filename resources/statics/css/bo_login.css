@@ -1,0 +1,143 @@
+/**
+* 登录页面
+* 
+* @author yh 20181129
+*/
+
+.login-screen {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background: url("../img/login-default-bg.jpg");
+    background-size:100% 100%;
+}
+
+.login-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 300px;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);; /* IE 9 */
+    -webkit-transform: translate(-50%,-50%);; /* Safari and Chrome */
+    /* -webkit-animation: bounceIn 600ms linear;
+    -moz-animation: bounceIn 600ms linear;
+    -o-animation: bounceIn 600ms linear;
+    animation: bounceIn 600ms linear; */
+}
+
+.login-box-head {
+    text-align:center
+}
+
+.login-box-body {
+    margin-top: 12px;
+    padding: 40px;
+    background: #fff;
+    /* -webkit-animation: bounceIn 600ms linear;
+    -moz-animation: bounceIn 600ms linear;
+    -o-animation: bounceIn 600ms linear;
+    animation: bounceIn 600ms linear; */
+}
+
+
+.login-box-head-left{
+    display: inline-block;
+}
+
+
+.login-box-head-right {
+    display: inline-block;
+}
+
+.login-box-head-right h3 {
+    letter-spacing: 2px;
+    font-size: 28px;
+    line-height: 34px;
+    color: #2b303a; /* #225CEE */
+    font-family: Microsoft Yahei, serif;
+}
+
+
+.login-box-body .form-control {
+    height: 40px;
+    font-size: 16px;
+}
+
+.login-box-body .btn {
+    padding: 10px 12px;
+}
+
+
+
+.form-group{
+	margin-bottom: 20px !important;
+	position: relative;
+}
+
+.form-group img{
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 90px !important;
+	height: 30px !important;
+}
+
+.login-box-body input{
+	border-color: #DFE3E6 !important;
+}
+
+.login-box-body input:focus{
+	border-color: #225CEE !important;
+}
+
+.login-box-body button {
+	width: 100%;
+	height: 40px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	color: #fff;
+    background: #225CEE;
+    font-size: 18px;
+    border-radius: 8px;
+}
+
+.login-box-body button:active{
+	opacity: 0.6;
+}
+
+.logo-ico-login {
+    letter-spacing: 2px;
+    font-size: 28px;
+    line-height: 30px;
+    color: #2b303a; /* #225CEE */
+    font-family: Wide Latin, serif;
+    float: left;
+    text-shadow: 1px 1px 0 #f96,-1px -1px 0 #f96;
+}
+
+.logo-title-login {
+    margin-bottom: 2px;
+    letter-spacing: 2px;
+    font-size: 28px;
+    line-height: 30px;
+    color: #2b303a; /* #225CEE */
+    font-family: Microsoft Yahei, serif;
+    float: left;
+    font-weight: bold;
+}
+
+.input-box {
+    display:flex;border: 1px solid #D2D2D2!important;
+    padding: 0px 19px;
+    background-color: #fff;
+    height: 38px;
+    line-height: 38px;
+    border-radius: 3px;
+}
+
+.input-div {
+    border-style: none;
+    padding: 0px 19px;
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--Embed the header.html template at this location-->
+{[ template "header.html" .]}
+    <link rel="stylesheet" href="/resources/statics/css/bo_login.css">
+    <script src="/resources/statics/js/jquery.validate.min.js"></script>
+</head>
+
+<body>
+    <div class="login-screen">
+        <div class="login-box">
+        <div class="login-box-head">
+            <div class="login-box-head-left">
+                <span class="logo-ico-login">{[.logo_ico]}</span>
+            </div>
+            <div class="login-box-head-right">
+                <span class="logo-title-login">{[.logo_title]}</span>
+            </div>
+        </div>
+
+
+        <div class="login-box-body">
+            <form class="m-t layui-form" role="form" id="login_form" action="/login" method="POST">
+                <div class="form-group">
+                    <div class="input-box">
+                        <i class="layui-icon layui-icon-username"></i>
+                        <input type="text" name="acct" class="input-div" placeholder="手机/邮箱/用户名" lay-verify="required|acct" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-box">
+                        <i class="layui-icon layui-icon-password"></i>
+                        <input type="password" name="password" class="input-div" placeholder="密码" lay-verify="required|password" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-xs8">
+                        <input type="checkbox" id="remember" name="remember" title="记住我" lay-skin="primary" checked>
+                    </div>
+                    <div class="layui-col-xs4">
+                        <button type="submit" lay-filter="btn_submit" lay-submit="" id="btn_submit" class="layui-btn layui-bg-green layui-btn-xs">登 录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <div id="browser_warning" style="display: none">
+        <div class=" margin text-center">
+            <p class="text-red ">请使用浏览器(谷歌浏览器、360极速或其他国产浏览器极速模式)操作本后台！</p>
+            <a class="btn btn-success" target="_blank" href="https://www.google.cn/chrome/" data-toggle="tooltip"
+               title="点击去下载谷歌浏览器">谷歌浏览器</a>
+            <a class="btn btn-success" target="_blank" href="https://browser.360.cn/ee/index.html" data-toggle="tooltip"
+               title="点击去下载360极速浏览器">360极速浏览器</a>
+            <a class="btn btn-success" target="_blank" href="https://browser.qq.com/" title="点击去下载QQ浏览器"
+               data-toggle="tooltip">QQ浏览器</a>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    /*检查浏览器*/
+    function checkBrowser() {
+        if (isIE()) {
+            console.log('不支持的浏览器');
+            layer.open({
+                type: 1,
+                content: $('#browser_warning').html(),
+                icon: 5,
+                title: '警告',
+                area: ['500px', '300px'],
+                closeBtn: 0,
+                moveType: 1,
+                resize: false
+            });
+        } else {
+            console.log('支持的现代浏览器');
+        }
+    }
+
+    function isIE() {
+        return !!window.ActiveXObject || "ActiveXObject" in window;
+    }
+
+    $(function () {
+        checkBrowser();
+        layui.use('form', function() {
+            let form = layui.form, layer = layui.layer;
+            // 监听提交
+            form.on('submit(btn_submit)', function(data){
+                loadingTips(true)
+                let lf = $("#login_form")
+                let targetUrl = lf.attr("action");
+                $.post(targetUrl, lf.serialize()).done(function (ret) {
+                    if (handleData(ret, '')) {
+                        window.location.href = ret.msg;
+                    }
+                }).always(function () {
+                    loadingTips(false)
+                })
+                return false;
+            })
+
+            // 自定义表单验证
+            form.verify({
+                acct:function(value, item){ //value：表单的值、item：表单的DOM对象
+                    if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                        return '用户名不能有特殊字符';
+                    }
+                    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                        return '用户名首尾不能出现下划线\'_\'';
+                    }
+                    if(/^\d+\d+\d$/.test(value)){
+                        return '用户名不能全为数字';
+                    }
+                },
+                password: [
+                    /^[\S]{6,12}$/
+                    ,'密码必须6到12位，且不能出现空格'
+                ],
+            });
+        })
+    })
+</script>
+</html>

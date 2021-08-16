@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--Embed the header.html template at this location-->
+  {[ template "header.html" .]}
+</head>
+<body>
+<div class="panel-top-{[.skinId]}">
+  <table id="tab_account" lay-filter="demo" ></table>
+
+</div>
+
+<!--头部按钮-->
+<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-group" >
+    <button id="add_account" class="layui-btn layui-btn-xs btn-bg-{[.skinId]}" lay-event="add_account"><i class="fa fa-plus-square" style="margin-right: 6px"></i>添加帐户</button>
+  </div>
+  <span id="def_password_html" class="layui-badge"> </span>
+</script>
+
+<script type="text/html" id="def_password_script">
+  <i class="fa fa-key" style="margin-right: 6px" id="def_pass">默认密码:{{d.defPass}}</i>
+</script>
+
+<!--行内按钮-->
+<script type="text/html" id="bar_btn">
+  <button class="layui-btn layui-btn-xs layui-btn-primary" lay-event="detail">
+    <i class="fa fa-ellipsis-h"></i>
+  </button>
+</script>
+
+<!--编辑-->
+<div id="box_from" style="display: none">
+  <form id="frm_account" lay-filter="frm_account" class="layui-form" action="" style="margin: 6px 12px 6px -30px;">
+    <div class="layui-card" style="margin: 6px 0px 12px 42px; padding: 6px 6px 12px 6px;">
+      <div class="layui-row">
+        <div class="layui-col-xs4">
+          <label>ID:</label>
+          <span id="id">65555</span>
+        </div>
+        <div class="layui-col-xs8">
+          <label>LastIP:</label>
+          <span id="ip">65555</span>
+        </div>
+      </div>
+      <div class="layui-row">
+        <div class="layui-col-xs12">
+          <label>创建时间:</label>
+          <span id="ctm">65555</span>
+        </div>
+      </div>
+      <div class="layui-row">
+        <div class="layui-col-xs12">
+          <label>更新时间:</label>
+          <span id="utm">65555</span>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+      <input type="text" name="id" autocomplete="off" class="layui-input" >
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">Acct</label>
+      <div class="layui-input-block">
+        <input type="text" id="acct" name="acct" required  lay-verify="required" placeholder="请输入帐号" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">名字</label>
+      <div class="layui-input-block">
+        <input type="text" id="name" name="name" required  lay-verify="required" placeholder="请输入名字" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+
+    <div class="layui-form-item" >
+      <label class="layui-form-label">是否有效</label>
+      <div class="layui-input-block">
+        <input type="radio" id="valid0" name="valid" value="0" title="无效">
+        <input type="radio" id="valid1" name="valid" value="1" title="有效">
+      </div>
+    </div>
+
+    <div class="layui-form-item" pane="">
+      <label class="layui-form-label">权限</label>
+      <div class="layui-input-block">
+          <div id="access_html"></div>
+      </div>
+    </div>
+    <hr>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <div class="layui-btn-group layui-layout-right">
+          <button id="btn_reset_pass" type="submit" class="layui-btn layui-btn-xs" lay-submit=""  lay-filter="btn_reset_pass"><i class="fa fa-refresh"></i>重置密码</button>
+          <button id="btn_submit" type="submit" class="layui-btn layui-btn-xs btn-bg-{[.skinId]}" lay-submit=""  lay-filter="btn_submit"><i class="fa fa-check"></i>立即提交</button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--公共方法 在index.html-->
+{[ template "method.html" .]}
+
+
+
+<script type="text/javascript">
+  let accessArr = []    // 帐户权限分组
+  let accessKeys = []   // 权限互斥数组
+  let changeAccount     // 操作帐户弹出的对话框id
+  let page = 1          // 当前页码
+  let cols = []
+  let defPass = ""
+
+  // 表格显示
+  function tableRender(tab, cols) {
+    tab.render({
+      elem: '#tab_account'
+      , title: '用户表'
+      , toolbar: '#toolbarDemo'                     // 开启头部工具栏，并为其绑定左侧模板
+      , page: {                                     // 支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+        layout: ['count', 'prev', 'page', 'next']   // 自定义分页布局
+        ,groups: 5                                  // 只显示 1 个连续页码
+        ,first: false                               // 不显示首页
+        ,last: false                                // 不显示尾页
+      }
+      , limit: 10                                   // 每页默认显示的数量
+      , method:'get'                                // 提交方式
+      , cols: cols
+      , url: '/account/page',                       // 请求路径
+    });
+  }
+
+ // 设置表格
+  function tableRefresh() {
+   layui.use(['table', 'laydate'], function(){
+     let table = layui.table;
+     cols = [[
+       {fixed: 'id', title:'查看详细', toolbar: '#bar_btn', width:90}
+       , {field: 'id', title: 'ID', width:80, sort: true}
+       , {field: 'acct', title: '帐号', width:80}
+       , {field: 'name', title: '名字', width:120}
+     ]]
+     if ($(window).width() >= 600) {
+       cols[0].push({field: 'access', title: '权限', width:60})
+       cols[0].push({field: 'valid', title: '有效', width: 60})
+       cols[0].push({
+         field: 'ctm',
+         title: '创建时间',
+         width: 180,
+         templet: function (d) {
+           return d.ctm ? layui.util.toDateString(d.ctm * 1000, 'yyyy-MM-dd HH:mm:ss') : "没有创建时间"
+         }
+       })
+       cols[0].push({field: 'last', title: '最后登录ip', width: 160})
+       cols[0].push({
+         field: 'utm',
+         title: '更新时间',
+         width: 180,
+         templet: function (d) {
+           return d.utm ? layui.util.toDateString(d.utm * 1000, 'yyyy-MM-dd HH:mm:ss') : "没有更新时间"
+         }
+       })
+     }
+
+     // 第一次显示表格
+     tableRender(table, cols)
+
+     // 监听 行内按钮
+     table.on('tool(demo)', function(obj){
+       let data = obj.data;
+       if(obj.event === 'detail'){
+         dialogBox(data)
+       }
+     });
+
+     // 监听 头部按钮
+     table.on('toolbar(demo)', function (obj) {
+       switch (obj.event) {
+         case 'add_account':
+           dialogBox({id:"", acct:"", name:"", access:0, last:"", valid:1, ctm:0, utm:0})
+           break;
+       }
+     });
+
+   });
+ }
+
+
+
+ // 操作对话框
+  function dialogBox(data) {
+    let title = data.Id === "" ? "新建" : "详情"
+    let frm = $("#frm_account")
+    frm[0].reset()
+    frm.find("#id").html(data.id)
+    frm.find("#ip").html(data.last)
+    frm.find("#ctm").html(data.ctm ? layui.util.toDateString(data.ctm * 1000, 'yyyy-MM-dd HH:mm:ss') : "")
+    frm.find("#utm").html(data.utm ? layui.util.toDateString(data.utm * 1000, 'yyyy-MM-dd HH:mm:ss') : "")
+    if (parent.access & 1 << 0 !== 0) {
+      if (title === "详情") {
+        $("#acct").attr("disabled", "disabled")
+      } else {
+        $("#acct").removeAttr("disabled")
+      }
+    }
+    changeAccount = layer.open({
+      type: 1,
+      skin: 'layui-layer-demo panel-top-{[.skinId]}', //样式类名
+      title: [`<b><i class="fa fa-pencil" style="margin-right: 6px"></i> ${title} </b>`],
+      closeBtn: 1, //不显示关闭按钮
+      area: ['350px', '575px'],
+      icon: 5,
+      anim: 1,
+      shadeClose: true, //开启遮罩关闭
+      content: $("#box_from"),
+    });
+
+    layui.use(['table', 'form', 'layedit', 'laydate'], function() {
+      let form = layui.form
+      let table = layui.table;
+      //监听提交
+      form.on('submit(btn_submit)', function(data){
+        if ((1 << 0  & parent.access) === 0) {
+          layer.msg("失败: 没有权限操作" + data.msg, {icon: 5, shade: 0.3, time: 2000});
+          return false;
+        }
+        loadingTips(true)
+        let accVal = 0
+        $.each(accessArr, function(_, vals) {
+          $.each(vals, function(k, _) {
+            if ($(`#access${k}`).is(':checked')) {
+              accVal |= k
+            }
+          })
+        })
+        data.field["access"] = accVal
+        $.post("/account/modify", data.field).done(function (ret) {
+          if (handleData(ret, title === "新建" ? title : "修改")) {
+            // 修改后显示表格
+            tableRender(table, cols)
+          }
+        }).always(function () {
+          loadingTips(false)
+          layer.close(changeAccount)
+        })
+        return false;
+      })
+      // 监听重置
+      form.on('submit(btn_reset_pass)', function(data){
+        if ((1 << 0  & parent.access) === 0) {
+          layer.msg("失败: 没有权限操作" + data.msg, {icon: 5, shade: 0.3, time: 2000});
+          return false;
+        }
+        loadingTips(true)
+        $.post("/account/reset-password", data.field).done(function (ret) {
+          handleData(ret, "重置密码")
+        }).always(function () {
+          loadingTips(false)
+          layer.close(changeAccount)
+        })
+        return false;
+      })
+
+      //监听指定开关
+      form.on('checkbox(type)', function(data){
+        let k = accessKeys[data.value]
+        let obj = $(`#access${k}`)
+        if (obj.is(':checked')) {
+          obj.prop("checked", false);
+          form.render('checkbox');
+        }
+      });
+    })
+
+    let val = {
+      "id": data.id
+      ,"acct": data.acct // "name": "value"
+      ,"name": data.name
+      ,"valid": data.valid
+    }
+
+    $.each(accessArr, function(x, vals) {
+      $.each(vals, function(k, v) {
+        if ((Number(data.access) & Number(k)) !== 0) {
+          val[`access${k}`] = k
+        }
+      })
+    })
+
+    let form = layui.form
+    form.val('frm_account', val);
+  }
+
+  function getGroup() {
+    $.get("/account/group").done(function (ret) {
+      if (handleData(ret, "读取分组信息")) {
+        accessArr = ret.msg.group
+        defPass = ret.msg.defPass
+        $("#def_pass").html(`默认密码:${defPass}`)
+        let accessHtml = ""
+        $.each(accessArr, function(x, vals) {
+          let tmp = []
+          $.each(vals, function(k, v) {
+            accessHtml += `<input type="checkbox" id="access${k}" name="access${k}" value="${k}" title="${v}" lay-filter="type"`
+            if (parent.access & 1 << 0 === 0) {
+              accessHtml += ' disabled="disabled"'
+            }
+            accessHtml += ">"
+            tmp.push(k)
+          })
+          accessKeys[Number(tmp[0])] = Number(tmp[1])
+          accessKeys[Number(tmp[1])] = Number(tmp[0])
+        })
+
+        $("#access_html").html(accessHtml)
+        layui.use('laytpl', function () {
+          let laytpl = layui.laytpl;
+          laytpl($("#def_password_script").html()).render({"defPass": defPass}, function (comm) {
+            $("#def_password_html").html(comm);
+          });
+        })
+
+      }
+    }).always(function () {
+      loadingTips(false)
+      layer.close(changeAccount)
+    })
+  }
+
+  /**
+   * 根据权限显示
+   */
+  function checkAccess() {
+    if ((1 << 0  & parent.access) === 0) {
+      $("#add_account").hide()
+      $("#valid0").attr("disabled", "disabled")
+      $("#valid1").attr("disabled", "disabled")
+      $("#btn_reset_pass").hide()
+      $("#btn_submit").hide()
+      $("#name").attr("disabled", "disabled")
+      $("#acct").attr("disabled", "disabled")
+    }
+  }
+
+  $(function () {
+    getGroup()
+    tableRefresh()
+    checkAccess()
+  })
+</script>
+</body>
+</html>

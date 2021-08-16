@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 主页加载框架 -->
+<head>
+    {[ template "header.html" .]}
+</head>
+
+<body>
+<!-- 导航 -->
+<div class="nav-bg-{[.skinId]}" id="nav_main">
+    <div class="layui-input-inline" style="height: 50px"> <!--修改本处height 会影响index.html setIFrameHeight 的运算-->
+        <a href="/home" class="" target="rIframe" id="nav_logo_href">
+            <div class="layui-input-inline" style="margin-top: 15px; margin-left: 6px">
+                <div class="nav-logo-icon-{[.skinId]}" id="nav_logo_icon">
+                </div>
+            </div>
+            <div class="layui-input-inline" style="margin-top: 15px;">
+                <span class="nav-logo-title-{[.skinId]}" id="nav_logo_title"></span>
+            </div>
+        </a>
+    </div>
+    <button type="button" class="layui-btn layui-input-inline layui-layout-right layui-btn-sm nav-bg-{[.skinId]}" onclick="onNav()" id="btn_nav" style="margin: 12px">
+        <i class="fa fa-th-list fa-2x"></i>
+    </button>
+    <div class="layui-input-inline nav-bg-{[.skinId]}" id="navs" style="display:none" >
+        <div id="nav-list-html" lay-filter="side"></div>
+    </div>
+</div>
+
+<!-- 内容主体区域 -->
+<div style="margin: 6px 6px 0px 6px">
+    <iframe name="rIframe" id="rIframe" width="100%" height="100%" frameborder="0" src="/home" scrolling="no" allowtransparency="yes"></iframe>
+</div>
+
+<!-- 底部固定区域 -->
+<div class="layui-footer" style="height: 66px"> <!--修改本处height 会影响index.html setIFrameHeight 的运算-->
+    <hr class="layui-bg-gray">
+    <div style="margin: 3px 6px 0px 6px">
+        <div id="footer1">
+        </div>
+        <div id="footer2">
+        </div>
+        <div id="footer3">
+        </div>
+    </div>
+</div>
+
+<script src="/resources/statics/layui/navbar.js"></script>
+
+
+<script>
+    // 全局变量，iframe子窗口可以读取: parent.skinId
+    var title = ""
+    var uid = 0
+    var name = ""
+    var access = 0
+    var skinId = 0
+    let navbar
+
+    /**
+     * 动态设置框架高度
+     * @param height
+     * @constructor
+     */
+    function setIFrameHeight(height) {
+        let navHeight = 50 /*navs*/
+        let iframeTop = 12 /*iframe top down*/
+        let footerHeight = 73 /*footer top*/
+        if ($(window).width() > 600) {
+            navHeight += 10
+        }
+        let availHeight = window.screen.availHeight /* 可用的屏幕高度 如: win-任务框高度*/
+        let caleHeight = availHeight - navHeight - iframeTop - footerHeight
+        // 如果本身的高度就已经超出屏幕的高度，那么就没有什么好计算的了
+        if (height < caleHeight) {
+            let cliHeight = $(window).height() // 当前浏览器dody 高度
+            let browserHeight = window.outerHeight /*当前浏览器全部高度*/
+
+            // 计算当前 如果 当前浏览器dody 高度 > iframe
+            caleHeight  = cliHeight - navHeight - iframeTop - footerHeight
+            if (caleHeight > height) {
+                // 全屏时
+                if (browserHeight === availHeight || cliHeight > availHeight * 0.6){
+                    height = caleHeight
+                } else {
+                    // 取出全屏时，body的高度
+                    let outHeight = browserHeight - cliHeight
+                    height = availHeight - outHeight - navHeight - iframeTop - footerHeight
+                }
+            }
+        }
+
+        // 保证最小要有220的高度
+        if (height < 220) {
+            height = 220
+        }
+        $("#rIframe").height(height);
+    }
+
+    let navState = false
+    function onNav() {
+        navState = !navState
+        if (navState) {
+            $("#navs").show()
+        } else {
+            $("#navs").hide()
+        }
+    }
+
+    function windowChange(width) {
+        if (width < 600) { //  修改这个参数要更改 index.html setIFrameHeight 内的那个参数
+            $("#btn_nav").show()
+            $("#navs").hide()
+            navState = false
+        } else {
+            $("#btn_nav").hide()
+            $("#navs").show()
+            navState = true
+        }
+    }
+
+    $(window).resize(function(){
+        windowChange($(window).width())
+    })
+
+    /**
+     * 显示导航logo
+     * @param data
+     */
+    function navLogo(data) {
+        $("#nav_logo_icon").html(`${data["navLogoIcon"]}`)
+        $("#nav_logo_title").html(`${data["navLogoTitle"]}`)
+    }
+
+    /**
+     * 显示导航内容
+     * @param navs
+     */
+    function navList(navs) {
+        layui.use(['element', 'navbar'], function () {
+            let element = layui.element
+            navbar = layui.navbar();
+            let $ = layui.$
+
+            navbar.set({
+                elem: $("#nav-list-html"),　　// 存在组件的容器
+                target: "rIframe",           // 输出到的目标
+                data: navs,　　               // 提供给组件的数据列表，请严格按照规定格式提供。
+                skinParent: "nav-parent-{[.skinId]}",
+                skinBg: "nav-bg-{[.skinId]}"
+            });
+
+            //渲染navbar
+            navbar.render();
+
+            //监听点击事件
+            navbar.on('click(side)', function (data) {
+                windowChange($(window).width())
+            });
+            element.render();
+        })
+    }
+
+    function footerHtml(version, uid, ip, website, email) {
+        $("#footer1").html(`<b>Version:</b> ${version} <b>uid:</b> ${uid} <b>IP:</b> ${ip}`)
+        $("#footer2").html(`<b>Website:</b> <a class="email" href="${website}">${website}</a>`)
+        $("#footer3").html(`<b>Email:</b> <a class="email" href="mailto:${email}">${email}</a>`)
+    }
+
+    function changeSkin(skin) {
+        // skinId = skin
+        location.replace(location.href);
+    }
+
+    $(function () {
+        skinId = `{[.skinId]}`
+        loadingTips(true)
+        $.get("/data").done(function (ret) {
+            if (handleData(ret, '')) {
+                navLogo(ret.msg)
+                navList(ret.msg['navs'])
+                footerHtml(ret.msg['version'], ret.msg['userInfo']['id'], ret.msg['ip'], ret.msg['website'], ret.msg['email'])
+                sessionStorage.setItem("title", ret.msg['title'])
+                title = ret.msg['title']
+                sessionStorage.setItem("uid", ret.msg['userInfo']['id'])
+                uid = ret.msg['userInfo']['id']
+                sessionStorage.setItem("name", ret.msg['userInfo']['name'])
+                name = ret.msg['userInfo']['name']
+                sessionStorage.setItem("access", ret.msg['userInfo']['access'])
+                access = ret.msg['userInfo']['access']
+                sessionStorage.setItem("skinId", ret.msg['userInfo']['skin'])
+                skinId = ret.msg['userInfo']['skin']
+
+
+                // let title = sessionStorage.getItem("title")
+                // let uid = sessionStorage.getItem("uid")
+                // let name = sessionStorage.getItem("name")
+                // let access = sessionStorage.getItem("access")
+                // let skinId = sessionStorage.getItem("skinId")
+            }
+        }).always(function () {
+            loadingTips(false)
+        })
+        windowChange($(window).width())
+    })
+</script>
+
+</body>
+</html>

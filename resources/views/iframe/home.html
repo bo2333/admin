@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--Embed the header.html template at this location-->
+    {[ template "header.html" .]}
+</head>
+<body>
+<div class="layui-card">
+    <div class="panel-info-left-{[.skinId]}" style="height: 38px" id="panel_welcome">
+        <div class="layui-row" style="padding: 10px ">
+            <div class="layui-col-xs6">
+                <i class="fa fa-info"></i>
+                <span id="name" style="font-size: 14px"></span>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-btn-group layui-layout-right">
+                    <button onclick="onChangePass()" class="layui-btn layui-btn-xs layui-btn-primary layui-border-orange" style="margin-left: 6px">
+                        <i class="fa fa-pencil" style="margin-right: 6px"></i>修改密码
+                    </button>
+                    <button onclick="onChangeSkin()" class="layui-btn layui-btn-xs layui-btn-primary layui-border-orange" style="margin-left: 6px">
+                        <i class="fa fa-skyatlas" style="margin-right: 6px"></i>更换皮肤
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-panel panel-top-{[.skinId]}" style="margin-top: 6px;" id="panel_system">
+        <div style="margin: 6px 6px 6px 6px;">
+            <i class="fa fa-university" style="margin-right: 6px"></i>
+            <b>系统信息</b>
+        </div>
+        <hr>
+        <div style="margin: 6px 6px 6px 6px;">
+            <div class="layui-row">
+                <div class="layui-col-xs6 layui-col-md2" style="border: 1px solid #eeeeee">
+                    <span class="layui-inline" style="width: 56px;text-align: center;background-color:#cccccc">go版本</span>
+                    <span class="layui-inline" id="go_version"></span>
+                </div>
+                <div class="layui-col-xs6 layui-col-md2" style="border: 1px solid #eeeeee">
+                    <span class="layui-inline" style="width: 56px;text-align: center;background-color:#cccccc">gin版本</span>
+                    <span class="layui-inline" id="gin_version"></span>
+                </div>
+                <div class="layui-col-xs6 layui-col-md2" style="border: 1px solid #eeeeee">
+                    <span class="layui-inline" style="width: 56px;text-align: center;background-color:#cccccc">db版本</span>
+                    <span class="layui-inline" id="db_version"></span>
+                </div>
+                <div class="layui-col-xs6 layui-col-md2" style="border: 1px solid #eeeeee">
+                    <span class="layui-inline" style="width: 56px;text-align: center; background-color:#cccccc">浏览器</span>
+                    <span class="layui-inline" id="browser"></span>
+                </div>
+                <div class="layui-col-xs6 layui-col-md2" style="border: 1px solid #eeeeee">
+                    <span class="layui-inline" style="width: 56px;text-align: center;background-color:#cccccc">时区</span>
+                    <span class="layui-inline" id="timezone"></span>
+                </div>
+                <div class="layui-col-xs6 layui-col-md2" style="border: 1px solid #eeeeee;background-color:#cccccc">
+                    <span class="layui-inline" style="margin-left: 8px" id="now">{[.now]}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<!--修改密码-->
+<div id="dlg_change_password" style="display: none">
+    <form id="frm_change_password" class="layui-form layui-form-pane" style="margin: 12px 6px 6px 6px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">原始密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="old_password" required  lay-verify="required|pass" placeholder="请输入原密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="new_password" required  lay-verify="required|pass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认新密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="sub_password" required  lay-verify="required|pass" placeholder="请确认新密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <div class="layui-btn-group layui-layout-right">
+                    <button type="reset" class="layui-btn layui-btn-xs"><i class="fa fa-times"></i>重置</button>
+                    <button type="submit" class="layui-btn btn-bg-{[.skinId]} layui-btn-xs" lay-submit=""  lay-filter="btn_change_password"><i class="fa fa-check"></i>立即提交</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="dlg_change_skin" style="display: none">
+    <form class="layui-form" action="" id="frm_skin" lay-filter="frm_skin" style="margin: 12px 6px 6px -70px;">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="radio" name="skin" value="0" title="藏青" class="layui-bg-cyan">
+                <input type="radio" name="skin" value="1" title="蓝色" class="layui-bg-blue">
+                <input type="radio" name="skin" value="2" title="墨绿" class="layui-bg-green">
+                <input type="radio" name="skin" value="3" title="橙色" class="layui-bg-orange">
+                <input type="radio" name="skin" value="4" title="赤色" class="layui-bg-red">
+                <input type="radio" name="skin" value="5" title="雅黑" class="layui-bg-black">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn layui-btn-xs layui-layout-right btn-bg-{[.skinId]}" lay-submit=""  lay-filter="btn_change_skin"><i class="fa fa-check"></i>立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--公共方法 在index.html-->
+{[ template "method.html" .]}
+
+
+<script type="text/javascript">
+    let changePassId
+    let changeSkinId
+
+    /**
+     * 更改个人密码
+     */
+    function onChangePass() {
+        //自定页
+        changePassId = layer.open({
+            type: 1,
+            skin: `layui-layer-demo panel-top-${parent.skinId}`, //样式类名
+            title: [`<b><i class="fa fa-pencil" style="margin-right: 6px"></i>修改密码 </b>`],
+            closeBtn: 1, //不显示关闭按钮
+            area: ['300px', '300px'],
+            icon: 5,
+            anim: 1,
+            shadeClose: true, //开启遮罩关闭
+            content: $("#dlg_change_password"),
+        });
+    }
+
+    /**
+     * 更换皮肤
+     */
+    function onChangeSkin() {
+        //自定页
+        changeSkinId = layer.open({
+            type: 1,
+            skin: `layui-layer-demo panel-top-${parent.skinId}`, //样式类名
+            title: [`<b><i class="fa fa-skyatlas" style="margin-right: 6px"></i>更换皮肤 </b>`],
+            closeBtn: 1, //不显示关闭按钮
+            area: ['300px', '300px'],
+            icon: 5,
+            anim: 1,
+            shadeClose: true, //开启遮罩关闭
+            content: $("#dlg_change_skin"),
+        });
+    }
+</script>
+
+<!--修改密码-->
+<script type="text/javascript">
+    function getData() {
+        loadingTips(true)
+        $.get("/home-data").done(function (ret) {
+            if (handleData(ret, '')) {
+                $("#go_version").html(ret.msg["goVersion"])
+                $("#gin_version").html(ret.msg["ginVersion"])
+                $("#db_version").html(ret.msg["dbVersion"])
+                $("#browser").html(ret.msg["browser"])
+                $("#timezone").html(ret.msg["timezone"])
+                $("#now").html(ret.msg["now"])
+            }
+        }).always(function () {
+            loadingTips(false)
+        })
+    }
+
+    $(function () {
+        layui.use(['form'], function(){
+            let form = layui.form, layer = layui.layer;
+
+            //自定义验证规则
+            form.verify({
+                pass: [
+                    /^[\S]{6,12}$/
+                    ,'密码必须6到12位，且不能出现空格'
+                ]
+            });
+
+            //监听提交
+            form.on('submit(btn_change_password)', function(data){
+                if (data.field.new_password !== data.field.sub_password) {
+                    layer.msg("2次密码输入不相等", {icon: 5, shade: 0.3, time: 2000});
+                    return false
+                }
+                loadingTips(true)
+                $.post('/account/change-password', {"old":data.field.old_password, "chg": data.field.new_password}).done(function (data) {
+                    handleData(data, "密码修改")
+                }).always(function () {
+                    loadingTips(false)
+                })
+
+                layer.close(changePassId)
+                return false;
+            });
+
+            //监听提交
+            form.on('submit(btn_change_skin)', function(data){
+                loadingTips(true)
+                $.ajaxSetup ({cache:false})
+                let skin = data.field.skin
+                $.post('/account/change-skin', data.field).done(function (data) {
+                    parent.changeSkin(data.msg)
+                    sessionStorage.setItem("skin", parent.skinId)
+                }).always(function () {
+                    loadingTips(false)
+                })
+
+                layer.close(changeSkinId)
+                return false;
+            });
+
+            form.val('frm_skin', {skin: parent.skinId});
+        });
+
+        $("#name").html(`您好，${parent.name} `)
+        getData()
+    })
+
+</script>
+
+</body>
+</html>
