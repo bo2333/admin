@@ -361,7 +361,6 @@
     loadingTips(true)
     $.get("/action/data").done(function (ret) {
       if (handleData(ret, "读取分组信息")) {
-        console.log(ret)
         describes = ret.msg['describe']
         let selOpm = $("#sel_opm")
         if (describes) {
